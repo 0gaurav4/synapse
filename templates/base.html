@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <link rel="stylesheet" href="static/css/wrapper.css">
+    <link rel="stylesheet" href="static/css/loginsignupbutton.css">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Navbar -->
+
+    <nav class="bg-white shadow-lg fixed w-full z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <span class="text-2xl font-bold text-indigo-600"><img src="static/images/logo.png" width="100rem" height="100rem"  alt="LOGO"></span>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="/" class="border-indigo-500 text-gray inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium">Home</a>
+                        <a href="#" class="text-gray hover:text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium">About</a>
+                        <a href="#" class="text-gray hover:text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium">Contact</a>
+                    </div>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    {% if current_user.is_authenticated %}
+                        <span class="text-gray-700 mr-4">Hello, {{ current_user.username }}</span>
+                        <a href="/logout" class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Logout</a>
+                    {% else %}
+                    <button class="btn-1" id="login-button">
+                        <div class="original">LOGIN</div>
+                        <div class="letters">
+                          <span>L</span>
+                          <span>O</span>
+                          <span>G</span>
+                          <span>I</span>
+                          <span>N</span>
+                        </div>
+                      </button>
+
+                      <button class="btn-1" id="signup-button">
+                        <div class="original">SIGNUP</div>
+                        <div class="letters">
+                          <span>S</span>
+                          <span>I</span>
+                          <span>G</span>
+                          <span>N</span>
+                          <span>U</span>
+                          <span>P</span>
+                        </div>
+                      </button>
+
+                    {% endif %}
+                </div>
+                <!-- Mobile menu button -->
+                <div class="-mr-2 flex items-center sm:hidden">
+                    <button id="mobile-menu-btn" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden sm:hidden">
+            <div class="pt-2 pb-3 space-y-1">
+                <a href="/" class="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Home</a>
+                <a href="#" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">About</a>
+                <a href="#" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Contact</a>
+                {% if current_user.is_authenticated %}
+                    <a href="/logout" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Logout</a>
+                {% else %}
+                    <a href="/login" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Login</a>
+                    <a href="/signup" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+
+    
+    <!-- Flash messages -->
+    <div class="pt-16">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+                        <div class="alert {{ 'bg-green-100 text-green-700' if category == 'success' else 'bg-red-100 text-red-700' }} px-4 py-3 rounded relative" role="alert">
+                            <span>{{ message }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main content -->
+    <main class="pt-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-10">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <p class="text-center">
+                <img class="footerimage" src="{{ url_for('static', filename='images/footer.png') }}" width="50" height="50" alt="footer">
+                 © 2025 All rights reserved.
+                </p>
+
+
+                  
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        document.getElementById('login-button').addEventListener('click', function() {
+            window.location.href = '/login';
+        });
+
+        document.getElementById('signup-button').addEventListener('click', function() {
+            window.location.href = '/signup';
+        });
+
+    </script>
+</body>
+</html>
